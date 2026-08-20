@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>國字注音大冒險 - 自主學習與闖關系統</title>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=IXZYCipiQORqgqt5IcQO-SmjKl5EvXzFNhlwVds1YwTaAEY0PGrNpGzf-cfp5KirvtWDZf5u7w04r3x06gO9cj8HFThxGdQyethfeRDVWA98wC1TZE80gTRzCLXEd8b_ovZi3UEQqLPQEsPUybe5LA6WsgI3MhiMxKbr09DCnXG5pyfzm_TAiLpO0GTtrAbvEvkw5JLkB42TSlQymmXcMie0_DQF-lt_IdXvtNmokDPq1_G7x7b-1SYYzKf_o1AVnaQcmeJsfPHKuprqjj4eBxxCNfHsCX_8NEkSWSvsK6vGks3jc3xbqVLb1oFYnrAOsfpxV_aH5sbydM_8BM46S5zsi5FcUGc-VFaMxtuYtYWP9eR10EJYacqa4uYyYXkp5p8fEvDQn3R8s7lQJlSbFVFPJmG4xCAB2P6FuIhAE1ALw3DeGawq5BJndnY-oZ3Jsiz3J5zfSOUFXxl2d6_rXw" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVUJJTmNtVnpjRzl1YzJWZlpHRjBZUm9fQ2pBek1qUTBZVEEyT1RZMFpHVXdZemsxTURBd05qVTVOelUzTkdFd1pUSmxNREF4WVdZNE9UTmpZek16TmpjMk5qUVNDeElIRUxiaWhlZUlCeGdCJmZpbGVuYW1lPSVFNSU5QyU4QiVFNSVBRCU5NyVFNiVCMyVBOCVFOSU5RiVCMyVFNSVBNCVBNyVFNSU4NiU5MiVFOSU5QSVBQV8lRTUlOEIlOTUlRTYlQkMlQUIlRTklQTIlQTglRTklOTclOTYlRTklOTclOUMlRTclODklODguaHRtbCZvcGk9MTAzMTM1MDUw"/><style>
+  :root {
+    --anime-blue: #0284c7;
+    --anime-cyan: #06b6d4;
+    --anime-teal: #0891b2;
+    --anime-dark-teal: #0e7490;
+    --card-board: #164e63;
+    --accent-yellow: #facc15;
+    --accent-orange: #fb923c;
+    --btn-orange: #f97316;
+    --success: #10b981;
+    --error: #ef4444;
+    --font-kai: "BiauKai", "DFKai-SB", "標楷體", "Microsoft JhengHei", sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-kai);
+  }
+
+  body {
+    background: radial-gradient(circle at center, #0ea5e9 0%, #0891b2 50%, #0e7490 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    color: #0f172a;
+  }
+
+  /* 背景動態漂浮注音與國字裝飾 */
+  .bg-decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .floating-char {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 38px;
+    font-weight: bold;
+    user-select: none;
+    animation: floatUp 16s infinite linear;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.25; }
+    90% { opacity: 0.25; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* 頂部動漫 Banner */
+  .anime-banner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1000px;
+    background: linear-gradient(180deg, #bae6fd 0%, #7dd3fc 45%, #38bdf8 100%);
+    border-radius: 0 0 28px 28px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px 25px 15px;
+    text-align: center;
+    border: 4px solid #ffffff;
+    border-top: none;
+  }
+
+  .banner-clouds {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .banner-title-box {
+    display: inline-block;
+    background: #ffffff;
+    padding: 8px 36px;
+    border-radius: 50px;
+    box-shadow: 0 6px 0 #0284c7, 0 10px 15px rgba(0,0,0,0.15);
+    border: 3px solid #0284c7;
+    margin-bottom: 12px;
+  }
+
+  .banner-title {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(180deg, #ea580c 0%, #c2410c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
+  }
+
+  /* 導航功能按鈕列 */
+  .nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 2px solid #0284c7;
+    color: #0369a1;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #0284c7;
+    transition: all 0.15s ease;
+  }
+
+  .tab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #0284c7;
+    background: #f0f9ff;
+  }
+
+  .tab-btn.active {
+    background: #0284c7;
+    color: #ffffff;
+    box-shadow: 0 4px 0 #0369a1;
+  }
+
+  .tab-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #0369a1;
+  }
+
+  /* 主遊戲容器 */
+  .main-stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  /* 遊戲大黑板/主面板 */
+  .game-board {
+    background: #155e75;
+    border: 5px solid #67e8f9;
+    border-radius: 24px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), inset 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 30px 25px 25px;
+    position: relative;
+  }
+
+  /* 冒險吉祥物頭像 */
+  .mascot-avatar {
+    position: absolute;
+    top: -38px;
+    left: 25px;
+    width: 90px;
+    height: 90px;
+    background: #ffffff;
+    border: 4px solid #f97316;
+    border-radius: 50%;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    animation: bounce 2.5s infinite ease-in-out;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* 題型標籤 */
+  .stage-tag {
+    display: table;
+    margin: 0 auto 15px;
+    background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 6px 26px;
+    border-radius: 30px;
+    border: 2px solid #bae6fd;
+    box-shadow: 0 4px 0 #082f49;
+    letter-spacing: 2px;
+  }
+
+  /* 題目卡片 */
+  .question-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px 20px;
+    text-align: center;
+    border: 4px solid #38bdf8;
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15);
+    margin-bottom: 25px;
+  }
+
+  .question-prompt {
+    font-size: 46px;
+    font-weight: bold;
+    color: #0f172a;
+    letter-spacing: 3px;
+    line-height: 1.5;
+  }
+
+  .question-highlight {
+    background: #fde047;
+    color: #854d0e;
+    padding: 2px 14px;
+    border-radius: 12px;
+    border: 2px dashed #ca8a04;
+    display: inline-block;
+    margin: 0 4px;
+  }
+
+  /* 選項網格 */
+  .options-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 680px) {
+    .options-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .anime-option-btn {
+    background: #ffffff;
+    border: 3px solid #7dd3fc;
+    border-radius: 50px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #0284c7, 0 8px 12px rgba(0,0,0,0.15);
+    transition: all 0.15s ease;
+    outline: none;
+  }
+
+  .anime-option-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 9px 0 #0284c7, 0 12px 18px rgba(0,0,0,0.2);
+    background: #f0f9ff;
+  }
+
+  .anime-option-btn:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #0284c7;
+  }
+
+  .opt-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
+
+  .opt-text {
+    flex-grow: 1;
+    font-size: 34px;
+    font-weight: bold;
+    color: #0f172a;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+
+  .opt-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #e0f2fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+
+  /* 點擊正確/錯誤回饋 */
+  .anime-option-btn.correct-glow {
+    background: #ecfdf5 !important;
+    border-color: var(--success) !important;
+    box-shadow: 0 6px 0 #047857 !important;
+    color: #065f46 !important;
+  }
+  .anime-option-btn.correct-glow .opt-badge {
+    background: var(--success) !important;
+  }
+
+  .anime-option-btn.wrong-glow {
+    background: #fef2f2 !important;
+    border-color: var(--error) !important;
+    box-shadow: 0 6px 0 #b91c1c !important;
+    color: #991b1b !important;
+  }
+  .anime-option-btn.wrong-glow .opt-badge {
+    background: var(--error) !important;
+  }
+
+  /* 底部解說與小助手對話框 */
+  .helper-dialog-box {
+    margin-top: 20px;
+    display: none;
+    align-items: flex-start;
+    gap: 15px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .bot-avatar {
+    width: 75px;
+    height: 75px;
+    background: #ffffff;
+    border: 3px solid #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    flex-shrink: 0;
+  }
+
+  .dialog-bubble {
+    flex-grow: 1;
+    background: #e0f2fe;
+    border: 3px solid #38bdf8;
+    border-radius: 20px;
+    padding: 18px 22px;
+    position: relative;
+    box-shadow: 0 6px 0 #0284c7;
+    font-size: 22px;
+    line-height: 1.6;
+  }
+
+  .dialog-bubble::before {
+    content: "";
+    position: absolute;
+    left: -14px;
+    top: 25px;
+    border-width: 8px 14px 8px 0;
+    border-style: solid;
+    border-color: transparent #38bdf8 transparent transparent;
+  }
+
+  .explanation-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 10px;
+    border-left: 5px solid #0284c7;
+    font-size: 20px;
+    color: #334155;
+  }
+
+  /* 下一題按鈕 */
+  .btn-next-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(180deg, #f97316 0%, #ea580c 100%);
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 900;
+    padding: 12px 34px;
+    border-radius: 50px;
+    border: 3px solid #ffedd5;
+    box-shadow: 0 6px 0 #9a3412, 0 8px 15px rgba(0,0,0,0.25);
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.15s ease;
+  }
+
+  .btn-next-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 #9a3412;
+  }
+  .btn-next-action:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #9a3412;
+  }
+
+  /* 頁面切換控制 */
+  .view-panel {
+    display: none;
+  }
+  .view-panel.active {
+    display: block;
+  }
+
+  /* 結算頁面風格 */
+  .result-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+    border: 4px solid #38bdf8;
+  }
+
+  .result-score {
+    font-size: 76px;
+    font-weight: 900;
+    color: #ea580c;
+    text-shadow: 2px 2px 0 #fde047;
+    margin: 10px 0;
+  }
+
+  .wrong-card-list {
+    text-align: left;
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+  }
+
+  .wrong-item-row {
+    padding: 14px 18px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 20px;
+  }
+  .wrong-item-row:last-child {
+    border-bottom: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- 背景動態漂浮國字注音 -->
+<div class="bg-decorations" id="bg-decorations"></div>
+
+<!-- 頂部動漫風大標題與功能按鈕導航 -->
+<header class="anime-banner">
+  <div class="banner-title-box">
+    <div class="banner-title">✨ 國字注音大冒險 ✨</div>
+  </div>
+  
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('home')">🏠 首頁</button>
+    <button class="tab-btn" onclick="startAdventure(20, 'all')">📖 單元練習 (20題)</button>
+    <button class="tab-btn" onclick="openNotebookView()">📘 我的錯題本</button>
+    <button class="tab-btn" onclick="startRetestMode()">🎒 自行補考</button>
+  </div>
+</header>
+
+<main class="main-stage">
+  
+  <!-- 1. 首頁/選單面板 -->
+  <section id="view-home" class="view-panel active">
+    <div class="game-board" style="text-align: center; color: white;">
+      <div class="mascot-avatar">🦊</div>
+      <h2 style="font-size: 34px; margin-top: 15px; letter-spacing: 2px; color: #fef08a;">冒險者，準備好挑戰了嗎？</h2>
+      <p style="font-size: 22px; margin: 15px 0 25px; line-height: 1.7;">
+        每次測驗將由題庫隨機抽取 <strong>20 題</strong>！<br>
+        答錯時智慧助手機構將立即為你解說，並收錄至專屬「錯題本」。
+      </p>
+      
+      <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+        <button class="btn-next-action" style="font-size: 26px; padding: 14px 42px;" onclick="startAdventure(20, 'all')">🚀 開始 20 題冒險闖關</button>
+        <button class="btn-next-action" style="background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border-color: #7dd3fc;" onclick="startAdventure(15, 'pronunciation')">🎯 專項：看國字選注音</button>
+        <button class="btn-next-action" style="background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%); border-color: #7dd3fc;" onclick="startAdventure(15, 'character')">🎯 專項：看注音選國字</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 作答進行中面板 (完全仿造動漫圖風格) -->
+  <section id="view-quiz" class="view-panel">
+    <div class="game-board">
+      <!-- 左上方吉祥物小狐狸 -->
+      <div class="mascot-avatar">🦊</div>
+      
+      <!-- 題型標籤 -->
+      <div id="q-stage-tag" class="stage-tag">看國字選注音</div>
+
+      <!-- 題目卡片 -->
+      <div class="question-card">
+        <div id="q-text-prompt" class="question-prompt">「<span class="question-highlight">娓娓</span>」道來</div>
+      </div>
+
+      <!-- 四個卡通角色選項按鈕 -->
+      <div id="options-box" class="options-container">
+        <!-- 動態渲染選項 -->
+      </div>
+
+      <!-- 底部錯題解說與機器人對話框 -->
+      <div id="helper-feedback-box" class="helper-dialog-box">
+        <div class="bot-avatar">🤖</div>
+        <div class="dialog-bubble">
+          <div id="feedback-title" style="font-weight: bold; font-size: 22px;"></div>
+          <div id="feedback-exp-content" class="explanation-card"></div>
+          <div style="text-align: right;">
+            <button class="btn-next-action" onclick="nextQuestion()">下一題 👉</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 結算畫面 -->
+  <section id="view-result" class="view-panel">
+    <div class="game-board">
+      <div class="result-box">
+        <h2 style="font-size: 36px; color: #0284c7;">🎉 闖關成果結算 🎉</h2>
+        <div class="result-score"><span id="res-score">100</span> <span style="font-size: 32px;">分</span></div>
+        <p style="font-size: 24px; margin-bottom: 15px;">
+          本次挑戰 20 題，答對 <span id="res-correct" style="color: var(--success); font-weight: bold;">0</span> 題，答錯 <span id="res-wrong" style="color: var(--error); font-weight: bold;">0</span> 題。
+        </p>
+
+        <!-- 錯題清單展示 -->
+        <div id="result-wrong-box" style="display: none;">
+          <h3 style="font-size: 24px; color: #b91c1c; text-align: left; margin: 15px 0 8px;">❌ 本回合錯題精析紀錄：</h3>
+          <div id="result-wrong-items" class="wrong-card-list"></div>
+        </div>
+
+        <div style="margin-top: 25px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+          <button id="btn-retest-action" class="btn-next-action" style="background: linear-gradient(180deg, #d97706 0%, #b45309 100%);" onclick="startRetestMode()">🎒 錯題立即補考</button>
+          <button class="btn-next-action" onclick="startAdventure(20, 'all')">🔄 再玩一次 (新 20 題)</button>
+          <button class="btn-next-action" style="background: #0284c7;" onclick="switchTab('home')">🏠 回到主頁</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 我的錯題本面板 -->
+  <section id="view-notebook" class="view-panel">
+    <div class="game-board">
+      <div class="result-box">
+        <h2 style="font-size: 34px; color: #0369a1;">📘 我的自主訂正錯題本</h2>
+        <p style="font-size: 20px; color: #64748b; margin: 10px 0 20px;">累積所有練習中答錯的題目，隨時可自主複習與補考！</p>
+        <div id="notebook-items-container" class="wrong-card-list" style="max-height: 480px;"></div>
+        
+        <div style="margin-top: 20px;">
+          <button class="btn-next-action" onclick="startRetestMode()">🎒 對錯題本進行自主補考</button>
+          <button class="btn-next-action" style="background: #0284c7;" onclick="switchTab('home')">🏠 返回首頁</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// 題庫資料（包含題目、正確解答、誘答選項、角色頭貼、詳解）
+const QUESTION_BANK = [
+  {
+    id: 1,
+    type: 'pronunciation',
+    prompt: "「娓娓」道來",
+    highlight: "娓娓",
+    answer: "ㄇㄟˇ",
+    options: ["ㄇㄟˇ", "ㄨㄟˇ", "ㄋㄧˇ", "ㄇㄧˇ"],
+    explanation: "【娓娓道來】：音「ㄇㄟˇ ㄇㄟˇ ㄉㄠˋ ㄌㄞˊ」。形容說話生動動聽且連續不斷。常被誤讀為ㄨㄟˇ。"
+  },
+  {
+    id: 2,
+    type: 'pronunciation',
+    prompt: "「彳」亍",
+    highlight: "彳",
+    answer: "ㄔˋ",
+    options: ["ㄔˋ", "ㄔㄨˋ", "ㄒㄧㄥˊ", "ㄔ"],
+    explanation: "【彳亍】：音「ㄔˋ ㄔㄨˋ」。「彳」為第四聲ㄔˋ，形容慢步行走。"
+  },
+  {
+    id: 3,
+    type: 'pronunciation',
+    prompt: "彳「亍」",
+    highlight: "亍",
+    answer: "ㄔㄨˋ",
+    options: ["ㄔㄨˋ", "ㄔˋ", "ㄩˊ", "ㄉㄧㄥ"],
+    explanation: "【彳亍】：音「ㄔˋ ㄔㄨˋ」。「亍」為第四聲ㄔㄨˋ，走走停停之貌。"
+  },
+  {
+    id: 4,
+    type: 'pronunciation',
+    prompt: "「雋」永",
+    highlight: "雋",
+    answer: "ㄐㄩㄢˋ",
+    options: ["ㄐㄩㄢˋ", "ㄐㄩㄣˋ", "ㄐㄩㄢ", "ㄑㄩㄢˊ"],
+    explanation: "【雋永】：音「ㄐㄩㄢˋ ㄩㄥˇ」。形容意味深長、耐人尋味。注意不可讀作ㄐㄩㄣˋ。"
+  },
+  {
+    id: 5,
+    type: 'pronunciation',
+    prompt: "波「濤」起伏",
+    highlight: "濤",
+    answer: "ㄊㄠ",
+    options: ["ㄊㄠ", "ㄕㄡˋ", "ㄔㄡˊ", "ㄉㄠˋ"],
+    explanation: "【波濤】：教育部標準審訂音為「ㄅㄛ ㄊㄠ」（第一聲）。形容洶湧大浪。"
+  },
+  {
+    id: 6,
+    type: 'pronunciation',
+    prompt: "閉「塞」的心",
+    highlight: "塞",
+    answer: "ㄙㄜˋ",
+    options: ["ㄙㄜˋ", "ㄙㄞ", "ㄙㄞˋ", "ㄙㄜ"],
+    explanation: "【閉塞】：音「ㄅㄧˋ ㄙㄜˋ」。阻塞不通、封閉。塞車讀ㄙㄞ，邊塞讀ㄙㄞˋ。"
+  },
+  {
+    id: 7,
+    type: 'pronunciation',
+    prompt: "「鹹」腥的海風",
+    highlight: "鹹",
+    answer: "ㄒㄧㄢˊ",
+    options: ["ㄒㄧㄢˊ", "ㄒㄧㄢ", "ㄐㄧㄢˇ", "ㄍㄢˇ"],
+    explanation: "【鹹腥】：音「ㄒㄧㄢˊ ㄒㄧㄥ」。鹽味與海腥味。"
+  },
+  {
+    id: 8,
+    type: 'pronunciation',
+    prompt: "波光「瀲」灩",
+    highlight: "瀲",
+    answer: "ㄌㄧㄢˋ",
+    options: ["ㄌㄧㄢˋ", "ㄌㄧㄢˇ", "ㄑㄧㄢ", "ㄐㄧㄢˋ"],
+    explanation: "【波光瀲灩】：音「ㄅㄛ ㄍㄨㄤ ㄌㄧㄢˋ ㄧㄢˋ」。形容水波流動映照著閃耀光芒。"
+  },
+  {
+    id: 9,
+    type: 'pronunciation',
+    prompt: "令人「眈」溺",
+    highlight: "眈",
+    answer: "ㄉㄢ",
+    options: ["ㄉㄢ", "ㄉㄢˇ", "ㄔㄣˊ", "ㄓㄣ"],
+    explanation: "【眈溺】：音「ㄉㄢ ㄋㄧˋ」。通「耽溺」，過度沉迷而不能自拔。"
+  },
+  {
+    id: 10,
+    type: 'pronunciation',
+    prompt: "詭「譎」複雜",
+    highlight: "譎",
+    answer: "ㄐㄩㄝˊ",
+    options: ["ㄐㄩㄝˊ", "ㄐㄩㄝˋ", "ㄐㄩˊ", "ㄑㄧㄠˊ"],
+    explanation: "【詭譎】：音「ㄍㄨㄟˇ ㄐㄩㄝˊ」。形容變化莫測、難以捉摸。"
+  },
+  {
+    id: 11,
+    type: 'pronunciation',
+    prompt: "「葛」藤",
+    highlight: "葛",
+    answer: "ㄍㄜˊ",
+    options: ["ㄍㄜˊ", "ㄍㄜˇ", "ㄍㄜ", "ㄎㄜˊ"],
+    explanation: "【葛藤】：音「ㄍㄜˊ ㄊㄥˊ」。多年生草本植物，亦指糾纏不清的事情。"
+  },
+  {
+    id: 12,
+    type: 'pronunciation',
+    prompt: "白雲點「綴」",
+    highlight: "綴",
+    answer: "ㄓㄨㄟˋ",
+    options: ["ㄓㄨㄟˋ", "ㄔㄨㄛˋ", "ㄗㄨㄟˋ", "ㄉㄨㄢˇ"],
+    explanation: "【點綴】：音「ㄉㄧㄢˇ ㄓㄨㄟˋ」。襯托、裝飾。"
+  },
+  {
+    id: 13,
+    type: 'pronunciation',
+    prompt: "中「輟」執行",
+    highlight: "輟",
+    answer: "ㄔㄨㄛˋ",
+    options: ["ㄔㄨㄛˋ", "ㄓㄨㄟˋ", "ㄓㄨㄛˊ", "ㄔㄨㄛ"],
+    explanation: "【中輟】：音「ㄓㄨㄥ ㄔㄨㄛˋ」。中途停止或中斷。"
+  },
+  {
+    id: 14,
+    type: 'pronunciation',
+    prompt: "扶老「攜」幼",
+    highlight: "攜",
+    answer: "ㄒㄧ",
+    options: ["ㄒㄧ", "ㄒㄧˊ", "ㄒㄧㄝˊ", "ㄒㄧˋ"],
+    explanation: "【扶老攜幼】：音「ㄈㄨˊ ㄌㄠˇ ㄒㄧ ㄧㄡˋ」。「攜」標準審訂音為第一聲ㄒㄧ。"
+  },
+  {
+    id: 15,
+    type: 'pronunciation',
+    prompt: "「鐫」刻作品",
+    highlight: "鐫",
+    answer: "ㄐㄩㄢ",
+    options: ["ㄐㄩㄢ", "ㄐㄩㄢˋ", "ㄒㄧㄝˋ", "ㄑㄧㄢ"],
+    explanation: "【鐫刻】：音「ㄐㄩㄢ ㄎㄜˋ」。雕刻銘記之意。金部。"
+  },
+  {
+    id: 16,
+    type: 'character',
+    prompt: "大學「ㄧˋ」業",
+    highlight: "ㄧˋ",
+    answer: "肄",
+    options: ["肄", "肆", "繹", "翊"],
+    explanation: "【肄業】：音「ㄧˋ ㄧㄝˋ」。指在校修業尚未畢業。「肄」部首為聿部。"
+  },
+  {
+    id: 17,
+    type: 'character',
+    prompt: "「ㄓˋ」息",
+    highlight: "ㄓˋ",
+    answer: "窒",
+    options: ["窒", "至", "致", "桎"],
+    explanation: "【窒息】：音「ㄓˋ ㄒㄧˊ」。呼吸困難、氣流受阻。「窒」為穴部。"
+  },
+  {
+    id: 18,
+    type: 'character',
+    prompt: "「ㄐㄧㄝˊ」比鱗次",
+    highlight: "ㄐㄧㄝˊ",
+    answer: "櫛",
+    options: ["櫛", "節", "截", "潔"],
+    explanation: "【櫛比鱗次】：音「ㄐㄧㄝˊ ㄅㄧˇ ㄌㄧㄣˊ ㄘˋ」。像梳子與魚鱗般緊密排列。「櫛」為木部。"
+  },
+  {
+    id: 19,
+    type: 'character',
+    prompt: "童「ㄓˋ」嘉年華",
+    highlight: "ㄓˋ",
+    answer: "稚",
+    options: ["稚", "志", "智", "摯"],
+    explanation: "【童稚】：音「ㄊㄨㄥˊ ㄓˋ」。指年幼的小孩。「稚」為禾部。"
+  },
+  {
+    id: 20,
+    type: 'character',
+    prompt: "得以休「ㄑㄧˊ」",
+    highlight: "ㄑㄧˊ",
+    answer: "憩",
+    options: ["憩", "契", "泣", "祈"],
+    explanation: "【休憩】：音「ㄒㄧㄡ ㄑㄧˋ」。休息之意。「憩」從舌、自、心。"
+  },
+  {
+    id: 21,
+    type: 'character',
+    prompt: "「ㄓㄠˇ」澤生物",
+    highlight: "ㄓㄠˇ",
+    answer: "沼",
+    options: ["沼", "昭", "池", "濁"],
+    explanation: "【沼澤】：音「ㄓㄠˇ ㄗㄜˊ」。水草雜生之低窪泥池。「沼」為水部。"
+  },
+  {
+    id: 22,
+    type: 'character',
+    prompt: "食物「ㄌㄧㄢˋ」",
+    highlight: "ㄌㄧㄢˋ",
+    answer: "鏈",
+    options: ["鏈", "鍊", "練", "戀"],
+    explanation: "【食物鏈】：音「ㄕˊ ㄨˋ ㄌㄧㄢˋ」。自然界食物關聯。從金部的「鏈」。"
+  },
+  {
+    id: 23,
+    type: 'character',
+    prompt: "「ㄩ」迴曲折",
+    highlight: "ㄩ",
+    answer: "迂",
+    options: ["迂", "紆", "余", "淤"],
+    explanation: "【迂迴】：音「ㄩ ㄏㄨㄟˊ」。曲折繞遠。繞路用辵部「迂」；若是「紆尊降貴」用糸部「紆」。"
+  },
+  {
+    id: 24,
+    type: 'character',
+    prompt: "「ㄧˇ」水而立",
+    highlight: "ㄧˇ",
+    answer: "倚",
+    options: ["倚", "椅", "以", "旖"],
+    explanation: "【倚水】：音「ㄧˇ ㄕㄨㄟˇ」。靠著水邊。「倚」為人部。"
+  },
+  {
+    id: 25,
+    type: 'character',
+    prompt: "蝦「ㄒㄧㄝˋ」魚鳥",
+    highlight: "ㄒㄧㄝˋ",
+    answer: "蟹",
+    options: ["蟹", "謝", "懈", "屑"],
+    explanation: "【蝦蟹】：音「ㄒㄧㄚ ㄒㄧㄝˋ」。「蟹」字下半為虫部。"
+  },
+  {
+    id: 26,
+    type: 'character',
+    prompt: "「ㄔㄣˊ」浸在氛圍",
+    highlight: "ㄔㄣˊ",
+    answer: "沉",
+    options: ["沉", "晨", "辰", "臣"],
+    explanation: "【沉浸】：音「ㄔㄣˊ ㄐㄧㄣˋ」。落入或深處於某種氣氛中。「沉」從水部。"
+  },
+  {
+    id: 27,
+    type: 'character',
+    prompt: "「ㄩˋ」如的時間",
+    highlight: "ㄩˋ",
+    answer: "裕",
+    options: ["裕", "預", "欲", "御"],
+    explanation: "【裕如】：音「ㄩˋ ㄖㄨˊ」。充裕、從容不迫。「裕」為衣部（衤）。"
+  },
+  {
+    id: 28,
+    type: 'character',
+    prompt: "「ㄔㄠ」捷徑",
+    highlight: "ㄔㄠ",
+    answer: "抄",
+    options: ["抄", "超", "鈔", "炒"],
+    explanation: "【抄捷徑】：音「ㄔㄠ ㄐㄧㄝˊ ㄐㄧㄥˋ」。走近路。「抄」為手（扌）部。"
+  },
+  {
+    id: 29,
+    type: 'character',
+    prompt: "高聲「ㄋㄚˋ」喊",
+    highlight: "ㄋㄚˋ",
+    answer: "吶",
+    options: ["吶", "納", "訥", "那"],
+    explanation: "【吶喊】：音「ㄋㄚˋ ㄏㄢˇ」。大聲呼喊。「吶」為口部。"
+  },
+  {
+    id: 30,
+    type: 'character',
+    prompt: "生性木「ㄋㄜˋ」",
+    highlight: "ㄋㄜˋ",
+    answer: "訥",
+    options: ["訥", "吶", "納", "內"],
+    explanation: "【木訥】：音「ㄇㄨˋ ㄋㄜˋ」。指為人質樸但言談遲緩。「訥」為言部。"
+  }
+];
+
+// 動漫卡通頭像池
+const ANIME_AVATARS = ['👧', '👦', '👧🏻', '👦🏻', '🧒', '👧🏼'];
+
+// 狀態管理
+let currentQuizList = [];
+let currentIndex = 0;
+let roundWrongList = [];
+let masterNotebook = []; // 累積錯題本
+let correctCount = 0;
+let isAnswered = false;
+
+// 隨機洗牌
+function shuffle(arr) {
+  const res = [...arr];
+  for (let i = res.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [res[i], res[j]] = [res[j], res[i]];
+  }
+  return res;
+}
+
+// 動態背景字元生成
+function initBackgroundDecorations() {
+  const chars = ['ㄅ','ㄆ','ㄇ','ㄈ','ㄉ','ㄊ','ㄋ','ㄌ','ㄍ','ㄎ','ㄏ','ㄐ','ㄑ','ㄒ','娓','亍','雋','瀲','窒','櫛','稚','憩','迂','裕','訥'];
+  const container = document.getElementById('bg-decorations');
+  for(let i = 0; i < 24; i++) {
+    const span = document.createElement('span');
+    span.className = 'floating-char';
+    span.innerText = chars[Math.floor(Math.random() * chars.length)];
+    span.style.left = `${Math.random() * 95}vw`;
+    span.style.animationDelay = `${Math.random() * 15}s`;
+    span.style.animationDuration = `${12 + Math.random() * 8}s`;
+    container.appendChild(span);
+  }
+}
+initBackgroundDecorations();
+
+// 導航切換
+function switchTab(viewName) {
+  document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  const targetView = document.getElementById(`view-${viewName}`);
+  if (targetView) targetView.classList.add('active');
+}
+
+// 開始闖關測驗
+function startAdventure(count = 20, mode = 'all') {
+  let pool = [...QUESTION_BANK];
+  if (mode === 'pronunciation') pool = pool.filter(q => q.type === 'pronunciation');
+  if (mode === 'character') pool = pool.filter(q => q.type === 'character');
+
+  currentQuizList = shuffle(pool).slice(0, Math.min(count, pool.length));
+  currentIndex = 0;
+  correctCount = 0;
+  roundWrongList = [];
+
+  switchTab('quiz');
+  renderQuestion();
+}
+
+// 渲染當前題目
+function renderQuestion() {
+  isAnswered = false;
+  const q = currentQuizList[currentIndex];
+  
+  document.getElementById('q-stage-tag').innerText = 
+    `第 ${currentIndex + 1} / ${currentQuizList.length} 關 ‧ ${q.type === 'pronunciation' ? '看國字選注音' : '看注音選國字'}`;
+  
+  // 替換反白高亮區域
+  const formattedPrompt = q.prompt.replace(`「${q.highlight}」`, `「<span class="question-highlight">${q.highlight}</span>」`);
+  document.getElementById('q-text-prompt').innerHTML = formattedPrompt;
+
+  // 隨機排列四個選項
+  const shuffledOpts = shuffle(q.options);
+  const labels = ['A', 'B', 'C', 'D'];
+  const optBox = document.getElementById('options-box');
+  optBox.innerHTML = '';
+
+  shuffledOpts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'anime-option-btn';
+    btn.dataset.val = opt;
+    btn.onclick = () => handleSelectOption(opt, btn);
+    btn.innerHTML = `
+      <div class="opt-badge">${labels[idx]}</div>
+      <div class="opt-text">${opt}</div>
+      <div class="opt-avatar">${ANIME_AVATARS[idx % ANIME_AVATARS.length]}</div>
+    `;
+    optBox.appendChild(btn);
+  });
+
+  document.getElementById('helper-feedback-box').style.display = 'none';
+}
+
+// 處理點選答案
+function handleSelectOption(chosenVal, chosenBtn) {
+  if (isAnswered) return;
+  isAnswered = true;
+
+  const q = currentQuizList[currentIndex];
+  const isCorrect = (chosenVal === q.answer);
+  const allButtons = document.querySelectorAll('.anime-option-btn');
+
+  allButtons.forEach(btn => {
+    btn.disabled = true;
+    if (btn.dataset.val === q.answer) {
+      btn.classList.add('correct-glow');
+    }
+  });
+
+  const feedbackBox = document.getElementById('helper-feedback-box');
+  const feedbackTitle = document.getElementById('feedback-title');
+  const feedbackExp = document.getElementById('feedback-exp-content');
+
+  feedbackBox.style.display = 'flex';
+
+  if (isCorrect) {
+    correctCount++;
+    feedbackTitle.innerHTML = `<span style="color: var(--success);">🎉 太厲害了！回答完全正確！</span>`;
+  } else {
+    chosenBtn.classList.add('wrong-glow');
+    feedbackTitle.innerHTML = `<span style="color: var(--error);">❌ 哎呀答錯了！你選的是【${chosenVal}】，正解是【${q.answer}】</span>`;
+    
+    // 加入本輪錯題
+    const wrongData = { ...q, userAnswer: chosenVal };
+    roundWrongList.push(wrongData);
+
+    // 同步記錄至總錯題本（不重複）
+    if (!masterNotebook.some(item => item.id === q.id)) {
+      masterNotebook.push(wrongData);
+    }
+  }
+
+  feedbackExp.innerHTML = `<strong>💡 冒險重點精解：</strong>${q.explanation}`;
+}
+
+// 下一題
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < currentQuizList.length) {
+    renderQuestion();
+  } else {
+    showResultStage();
+  }
+}
+
+// 結算畫面
+function showResultStage() {
+  switchTab('result');
+  const total = currentQuizList.length;
+  const score = Math.round((correctCount / total) * 100);
+
+  document.getElementById('res-score').innerText = score;
+  document.getElementById('res-correct').innerText = correctCount;
+  document.getElementById('res-wrong').innerText = roundWrongList.length;
+
+  const wrongBox = document.getElementById('result-wrong-box');
+  const wrongItems = document.getElementById('result-wrong-items');
+  const retestBtn = document.getElementById('btn-retest-action');
+
+  if (roundWrongList.length > 0) {
+    wrongBox.style.display = 'block';
+    retestBtn.style.display = 'inline-flex';
+    wrongItems.innerHTML = roundWrongList.map((item, idx) => `
+      <div class="wrong-item-row">
+        <div><strong>第 ${idx + 1} 題：</strong>${item.prompt}</div>
+        <div style="margin: 4px 0;">
+          <span style="color: var(--error); font-weight: bold;">你的選擇：${item.userAnswer}</span>
+          <span style="color: var(--success); font-weight: bold; margin-left: 12px;">✓ 正確答案：【${item.answer}】</span>
+        </div>
+        <div style="font-size: 18px; color: #475569;">解析：${item.explanation}</div>
+      </div>
+    `).join('');
+  } else {
+    wrongBox.style.display = 'none';
+    retestBtn.style.display = 'none';
+  }
+}
+
+// 查看累積錯題本
+function openNotebookView() {
+  switchTab('notebook');
+  const container = document.getElementById('notebook-items-container');
+  if (masterNotebook.length === 0) {
+    container.innerHTML = `<div style="padding: 30px; font-size: 22px; color: #64748b;">✨ 目前沒有錯題紀錄！代表你的國字注音非常厲害喔！</div>`;
+  } else {
+    container.innerHTML = masterNotebook.map((item, idx) => `
+      <div class="wrong-item-row">
+        <div><strong>【錯題 ${idx + 1}】</strong>${item.prompt}</div>
+        <div style="color: var(--success); font-weight: bold; margin: 4px 0;">✓ 正確答案：【${item.answer}】</div>
+        <div style="font-size: 18px; color: #475569;">精解：${item.explanation}</div>
+      </div>
+    `).join('');
+  }
+}
+
+// 錯題補考模式
+function startRetestMode() {
+  const targetList = roundWrongList.length > 0 ? roundWrongList : masterNotebook;
+  if (!targetList || targetList.length === 0) {
+    alert("目前沒有錯題需要補考喔！可以直接進行 20 題綜合練習！");
+    startAdventure(20, 'all');
+    return;
+  }
+
+  currentQuizList = shuffle(targetList);
+  currentIndex = 0;
+  correctCount = 0;
+  roundWrongList = [];
+
+  switchTab('quiz');
+  renderQuestion();
+}
+
+// 支援鍵盤快速鍵 1/2/3/4 或 A/B/C/D
+document.addEventListener('keydown', (e) => {
+  if (!isAnswered) {
+    const key = e.key.toUpperCase();
+    const btns = document.querySelectorAll('.anime-option-btn');
+    if (['A', '1'].includes(key) && btns[0]) btns[0].click();
+    if (['B', '2'].includes(key) && btns[1]) btns[1].click();
+    if (['C', '3'].includes(key) && btns[2]) btns[2].click();
+    if (['D', '4'].includes(key) && btns[3]) btns[3].click();
+  } else if (e.key === 'Enter') {
+    const helper = document.getElementById('helper-feedback-box');
+    if (helper.style.display !== 'none') {
+      nextQuestion();
+    }
+  }
+});
+</script>
+
+</body>
+</html>
